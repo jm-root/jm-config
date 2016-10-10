@@ -1,0 +1,44 @@
+{
+  "name": "jm-config",
+  "version": "0.0.18",
+  "description": "a config lib using jm-mq",
+  "main": "./lib/index",
+  "scripts": {
+    "start": "node app",
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jm-root/jm-config.git"
+  },
+  "keywords": [
+    "javascript",
+    "jm-config",
+    "config"
+  ],
+  "author": "Jeff YU",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jm-root/jm-config/issues"
+  },
+  "homepage": "https://github.com/jm-root/jm-config",
+  "dependencies": {
+    "jm-core": "*",
+    "jm-ms-core": "*",
+    "jm-mq": "*"
+  },
+  "devDependencies": {
+      "jm-ms": "*",
+      "jm-sdk-core": "*",
+      "bluebird": "*",
+      "jshint": "*",
+      "gulp": "*",
+      "gulp-clean": "*",
+      "gulp-concat": "*",
+      "gulp-jshint": "*",
+      "gulp-rename": "*",
+      "gulp-sequence": "*",
+      "gulp-uglify": "*",
+      "gulp-util": "*"
+  }
+}

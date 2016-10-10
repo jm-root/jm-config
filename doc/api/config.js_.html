@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Source: router/config.js</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/jaguar.css">
+    
+    
+    <script>
+    var config = {"default":{"outputSourceFiles":true},"monospaceLinks":false,"cleverLinks":false,"anyTemplateSpecificParameter":"whatever"};
+    </script>
+    
+
+    
+</head>
+<body>
+<div id="wrap" class="clearfix">
+    
+<div class="navigation">
+    <h3 class="applicationName"><a href="index.html"></a></h3>
+
+    <div class="search">
+        <input id="search" type="text" class="form-control input-sm" placeholder="Search Documentations">
+    </div>
+    <ul class="list">
+    
+        <li class="item" data-name="config">
+            <span class="title">
+                <a href="config.html">config</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            <span class="subtitle">Members</span>
+            
+                <li data-name="config#mq"><a href="config.html#mq">mq</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="config#_parse"><a href="config.html#_parse">_parse</a></li>
+            
+                <li data-name="config#_stringify"><a href="config.html#_stringify">_stringify</a></li>
+            
+                <li data-name="config#delConfig"><a href="config.html#delConfig">delConfig</a></li>
+            
+                <li data-name="config#delRoot"><a href="config.html#delRoot">delRoot</a></li>
+            
+                <li data-name="config#getConfig"><a href="config.html#getConfig">getConfig</a></li>
+            
+                <li data-name="config#listConfig"><a href="config.html#listConfig">listConfig</a></li>
+            
+                <li data-name="config#setConfig"><a href="config.html#setConfig">setConfig</a></li>
+            
+                <li data-name="config#setConfigs"><a href="config.html#setConfigs">setConfigs</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+    </ul>
+</div>
+    <div class="main">
+        <h1 class="page-title" data-filename="config.js_.html">Source: router/config.js</h1>
+        
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source "><code>var jm = require('jm-ms-core');
+var ms = jm.ms;
+var consts = require('../consts');
+var ERR = consts.ERR;
+
+/**
+ * @apiDefine Error
+ *
+ * @apiSuccess (Error 200) {Number} err 错误代码
+ * @apiSuccess (Error 200) {String} msg 错误信息
+ *
+ * @apiExample {json} 错误:
+ *     {
+ *       err: 错误代码
+ *       msg: 错误信息
+ *     }
+ */
+module.exports = function(service, opts) {
+    opts = opts || {};
+    service.routes = service.routes || {};
+    var config = service.config;
+    var routes = service.routes;
+
+    var package = require('../../package.json');
+    routes.help = function(opts, cb, next){
+        cb(null, {
+            name: package.name,
+            version: package.version
+        });
+    };
+
+    routes.validator = function(opts, cb, next) {
+        opts.data.key = opts.params.key || null;
+        opts.data.root = opts.params.root || null;
+        if(!opts.data.key){
+            return cb(new Error(ERR.FA_PARAMS.msg), ERR.FA_PARAMS);
+        }
+        next();
+    };
+
+    /**
+     * @apiGroup config
+     * @apiVersion 0.0.1
+     * @apiUse Error
+     *
+     * @api {post} /:root/:key 设置配置信息
+     * @apiName setConfig
+     *
+     * @apiParam {Object} [value] 配置值
+     * @apiParam {Number} [expire=0] 过期时间, 单位秒, 0表示永不过期
+     * @apiParam {Boolean} [json=false] value是否json字符串
+     *
+     * @apiSuccess {Boolean} ret 返回结果
+     * @apiExample {json} 成功:
+     *     {
+     *       ret: true
+     *     }
+     * @apiExample {json} 失败:
+     *     {
+     *       ret: false
+     *     }
+     */
+    routes.setConfig = function(opts, cb) {
+        var data = opts.data;
+        if(data.json){
+            try{
+                data.value = JSON.parse(data.value);
+            }catch(e){
+                return cb(new Error(ERR.config.FA_PARSE_CONFIG.msg), ERR.config.FA_PARSE_CONFIG);
+            }
+        }
+        config.setConfig(data, function(err, doc){
+            if(!err) doc = {ret: doc};
+            cb(err, doc);
+        });
+    };
+
+    /**
+     * @apiGroup config
+     * @apiVersion 0.0.1
+     * @apiUse Error
+     *
+     * @api {get} /:root/:key 获取配置信息
+     * @apiName getConfig
+     *
+     * @apiSuccess {Boolean} ret 返回结果
+     * @apiExample {json} 成功:
+     *     {
+     *       ret: 配置值
+     *     }
+     */
+    routes.getConfig = function(opts, cb) {
+        config.getConfig(opts.data, function(err, doc){
+            if(!err) doc = {ret: doc};
+            cb(err, doc);
+        });
+    };
+
+    /**
+     * @apiGroup config
+     * @apiVersion 0.0.1
+     * @apiUse Error
+     *
+     * @api {delete} /:root/:key 删除配置信息
+     * @apiName delConfig
+     *
+     * @apiSuccess {Boolean} ret 返回结果
+     * @apiExample {json} 成功:
+     *     {
+     *       ret: true
+     *     }
+     * @apiExample {json} 失败:
+     *     {
+     *       ret: false
+     *     }
+     */
+    routes.delConfig = function(opts, cb) {
+        config.delConfig(opts.data, function(err, doc){
+            if(!err) doc = {ret: doc};
+            cb(err, doc);
+        });
+    };
+
+    /**
+     * @apiGroup config
+     * @apiVersion 0.0.1
+     * @apiUse Error
+     *
+     * @api {get} /:root?all= 列出所有配置项
+     * @apiName listConfig
+     *
+     * @apiSuccess {String[]} rows 返回结果
+     * @apiExample {json} 成功:
+     *     {
+     *       rows: 配置项数组
+     *     }
+     *     或者 ?all=1时全部值
+     *     {
+     *     }
+     */
+    routes.listConfig = function(opts, cb) {
+        opts.data.root = opts.params.root || null;
+        config.listConfig(opts.data, function(err, doc){
+            if(!err) {
+                if(!opts.data.all) doc = {rows: doc};
+            }
+            cb(err, doc);
+        });
+    };
+
+    /**
+     * @apiGroup config
+     * @apiVersion 0.0.1
+     * @apiUse Error
+     *
+     * @api {post} /:root 设置多个配置项
+     * @apiName setConfigs
+     *
+     * @apiSuccess {Boolean} ret 返回结果
+     * @apiExample {json} 成功:
+     *     {
+     *       ret: true
+     *     }
+     * @apiExample {json} 失败:
+     *     {
+     *       ret: false
+     *     }
+     */
+    routes.setConfigs = function(opts, cb) {
+        opts.data.root = opts.params.root || null;
+        var data = opts.data;
+        if(data.json){
+            try{
+                data.value = JSON.parse(data.value);
+            }catch(e){
+                return cb(new Error(ERR.config.FA_PARSE_CONFIG.msg), ERR.config.FA_PARSE_CONFIG);
+            }
+        }
+        config.setConfigs(data, function(err, doc){
+            if(!err) doc = {ret: doc};
+            cb(err, doc);
+        });
+    };
+
+    /**
+     * @apiGroup config
+     * @apiVersion 0.0.1
+     * @apiUse Error
+     *
+     * @api {post} /:root 删除根配置, 所有根下面的配置信息都被删除
+     * @apiName delRoot
+     *
+     * @apiSuccess {Boolean} ret 返回结果
+     * @apiExample {json} 成功:
+     *     {
+     *       ret: true
+     *     }
+     * @apiExample {json} 失败:
+     *     {
+     *       ret: false
+     *     }
+     */
+    routes.delRoot = function(opts, cb) {
+        opts.data.root = opts.params.root || null;
+        var data = opts.data;
+        config.delRoot(data, function(err, doc){
+            if(!err) doc = {ret: doc};
+            cb(err, doc);
+        });
+    };
+
+    var _help = function(opts, cb, next){routes.help(opts, cb, next);};
+    var _validator = function(opts, cb, next){routes.validator(opts, cb, next);};
+    var _setConfig = function(opts, cb, next){routes.setConfig(opts, cb, next);};
+    var _getConfig = function(opts, cb, next){routes.getConfig(opts, cb, next);};
+    var _delConfig = function(opts, cb, next){routes.delConfig(opts, cb, next);};
+    var _listConfig = function(opts, cb, next){routes.listConfig(opts, cb, next);};
+    var _setConfigs = function(opts, cb, next){routes.setConfigs(opts, cb, next);};
+    var _delRoot = function(opts, cb, next){routes.delRoot(opts, cb, next);};
+
+    var router = ms();
+    router
+        .add({
+            uri: '/',
+            type: 'get',
+            fn: [_help]
+        })
+        .add({
+            uri: '/:root/:key',
+            type: 'get',
+            fn: [_validator, _getConfig]
+        })
+        .add({
+            uri: '/:root/:key',
+            type: 'post',
+            fn: [_validator, _setConfig]
+        })
+        .add({
+            uri: '/:root/:key',
+            type: 'delete',
+            fn: [_validator, _delConfig]
+        })
+        .add({
+            uri: '/:root',
+            type: 'get',
+            fn: _listConfig
+        })
+        .add({
+            uri: '/:root',
+            type: 'post',
+            fn: _setConfigs
+        })
+        .add({
+            uri: '/:root',
+            type: 'delete',
+            fn: _delRoot
+        })
+    ;
+    return router;
+
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+
+        
+
+        <footer>
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Tue Sep 20 2016 20:47:53 GMT+0800 (CST)
+        </footer>
+    </div>
+</div>
+<script>prettyPrint();</script>
+<script src="scripts/jaguar.js"></script>
+</body>
+</html>

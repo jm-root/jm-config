@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Source: /Users/jeff/Documents/jm-root/jm-config/sdk/config.js</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/jaguar.css">
+    
+    
+    <script>
+    var config = {"default":{"outputSourceFiles":true},"monospaceLinks":false,"cleverLinks":false,"anyTemplateSpecificParameter":"whatever"};
+    </script>
+    
+
+    
+</head>
+<body>
+<div id="wrap" class="clearfix">
+    
+<div class="navigation">
+    <h3 class="applicationName"><a href="index.html"></a></h3>
+
+    <div class="search">
+        <input id="search" type="text" class="form-control input-sm" placeholder="Search Documentations">
+    </div>
+    <ul class="list">
+    
+        <li class="item" data-name="config">
+            <span class="title">
+                <a href="config.html">config</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="config#delConfig"><a href="config.html#delConfig">delConfig</a></li>
+            
+                <li data-name="config#delRoot"><a href="config.html#delRoot">delRoot</a></li>
+            
+                <li data-name="config#getConfig"><a href="config.html#getConfig">getConfig</a></li>
+            
+                <li data-name="config#listConfig"><a href="config.html#listConfig">listConfig</a></li>
+            
+                <li data-name="config#setConfig"><a href="config.html#setConfig">setConfig</a></li>
+            
+                <li data-name="config#setConfigs"><a href="config.html#setConfigs">setConfigs</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+    </ul>
+</div>
+    <div class="main">
+        <h1 class="page-title" data-filename="config.js.html">Source: /Users/jeff/Documents/jm-root/jm-config/sdk/config.js</h1>
+        
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source "><code>var jm = jm || {};
+if ((typeof exports !== 'undefined' &amp;&amp; typeof module !== 'undefined')) {
+    jm = require('jm-sdk-core');
+    require('jm-ms');
+}
+
+(function () {
+    var sdk = jm.sdk;
+    var ms = jm.ms;
+
+    sdk.on('init', function (opts) {
+        var model = 'config';
+        opts[model] = opts[model] || {};
+        opts[model].uri = opts[model].uri || opts.uri;
+        opts[model].timeout = opts[model].timeout || opts.timeout;
+        sdk[model].init(opts[model]);
+    });
+
+    /**
+     * config对象
+     * @class  config
+     * @param {Object} [opts={}] 参数
+     * @example
+     * opts参数:{
+     *  uri: 服务器uri(可选)
+     * }
+     */
+    sdk.config = {
+        init: function (opts) {
+            var self = this;
+            opts = opts || {};
+            var uri = opts.uri;
+            var prefix = opts.prefix || '/config';
+            this.uri = uri + prefix;
+            ms.client({
+                type: opts.type || 'http',
+                uri: this.uri,
+                timeout: opts.timeout || 0
+            }, function(err, doc){
+                self.client = doc;
+            });
+            jm.enableEvent(this);
+        },
+
+        _getlisturi: function(opts){
+            var root = opts.root || '';
+            return '/' + root;
+        },
+
+        _geturi: function(opts){
+            var key = opts.key || '';
+            return this._getlisturi(opts) + '/' + key;
+        },
+
+        /**
+         * 获取配置信息
+         * @function config#getConfig
+         * @param {Object} [opts={}] 参数
+         * @example
+         * opts参数:{
+         *  root: 根(必填)
+         *  key: 配置项(必填)
+         * }
+         * @param {callback} [cb=function(err,doc){}] 回调
+         * @example
+         * cb参数格式:
+         * doc参数:{
+         *  ret: 配置值(基本类型, 对象或者数组)
+         *  }
+         * 出错时, doc参数:{
+         *  err: 错误码,
+         *  msg: 错误信息
+         * }
+         */
+        getConfig: function (opts, cb) {
+            var self = this;
+            cb = cb || function () {
+                };
+            opts = opts || {};
+            var url = this._geturi(opts);
+            this.client.get({
+                uri: url
+            }, cb);
+        },
+
+        /**
+         * 设置配置信息
+         * @function config#setConfig
+         * @param {Object} [opts={}] 参数
+         * @example
+         * opts参数:{
+         *  root: 根(必填)
+         *  key: 配置项(必填)
+         *  value: 配置值(可选)
+         *  expire: 过期时间(可选, 单位秒, 默认0代表永不过期)
+         * }
+         * @param {callback} [cb=function(err,doc){}] 回调
+         * @example
+         * cb参数格式:
+         * doc参数:{
+         *  ret: 结果(true or false)
+         *  }
+         * 出错时, doc参数:{
+         *  err: 错误码,
+         *  msg: 错误信息
+         * }
+         */
+        setConfig: function (opts, cb) {
+            var self = this;
+            cb = cb || function () {
+                };
+            opts = opts || {};
+            var url = this._geturi(opts);
+            this.client.post({
+                uri: url,
+                data: opts
+            }, cb);
+        },
+
+        /**
+         * 删除配置信息
+         * @function config#delConfig
+         * @param {Object} [opts={}] 参数
+         * @example
+         * opts参数:{
+         *  root: 根(必填)
+         *  key: 配置项(必填)
+         * }
+         * @param {callback} [cb=function(err,doc){}] 回调
+         * @example
+         * cb参数格式:
+         * doc参数:{
+         *  ret: 结果(true or false)
+         *  }
+         * 出错时, doc参数:{
+         *  err: 错误码,
+         *  msg: 错误信息
+         * }
+         */
+        delConfig: function (opts, cb) {
+            var self = this;
+            cb = cb || function () {
+                };
+            opts = opts || {};
+            var url = this._geturi(opts);
+            this.client.delete({
+                uri: url
+            }, cb);
+        },
+
+        /**
+         * 删除根配置, 所有根下面的配置信息都被删除
+         * @function config#delRoot
+         * @param {Object} [opts={}] 参数
+         * @example
+         * opts参数:{
+         *  root: 根(必填)
+         * }
+         * @param {callback} [cb=function(err,doc){}] 回调
+         * @example
+         * cb参数格式:
+         * doc参数:{
+         *  ret: 结果(true or false)
+         *  }
+         * 出错时, doc参数:{
+         *  err: 错误码,
+         *  msg: 错误信息
+         * }
+         */
+        delRoot: function (opts, cb) {
+            var self = this;
+            cb = cb || function () {
+                };
+            opts = opts || {};
+            var url = this._getlisturi(opts);
+            this.client.delete({
+                uri: url
+            }, cb);
+        },
+
+        /**
+         * 列出配置项
+         * @function config#listConfig
+         * @param {Object} [opts={}] 参数
+         * @example
+         * opts参数:{
+         *  root: 根(必填)
+         * }
+         * @param {callback} [cb=function(err,doc){}] 回调
+         * @example
+         * cb参数格式:
+         * doc参数: {
+         *  rows: 配置项数组
+         *  }
+         * 出错时, doc参数:{
+         *  err: 错误码,
+         *  msg: 错误信息
+         * }
+         */
+        listConfig: function (opts, cb) {
+            var self = this;
+            cb = cb || function () {
+                };
+            opts = opts || {};
+            var url = this._getlisturi(opts);
+            if(opts.all) url += '?all=1';
+            this.client.get({
+                uri: url
+            }, cb);
+        },
+
+        /**
+         * 设置多个配置信息
+         * @function config#setConfigs
+         * @param {Object} [opts={}] 参数
+         * @example
+         * opts参数:{
+         *  root: 根(必填)
+         *  value: 配置对象(可选, 默认{})
+         *  expire: 过期时间(可选, 单位秒, 默认0代表永不过期)
+         * }
+         * @param {callback} [cb=function(err,doc){}] 回调
+         * @example
+         * cb参数格式:
+         * doc参数:{
+         *  ret: 结果(true or false)
+         *  }
+         * 出错时, doc参数:{
+         *  err: 错误码,
+         *  msg: 错误信息
+         * }
+         */
+        setConfigs: function (opts, cb) {
+            var self = this;
+            cb = cb || function () {
+                };
+            opts = opts || {};
+            var url = this._geturi(opts);
+            this.client.post({
+                uri: url,
+                data: opts
+            }, cb);
+        }
+    };
+
+})();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+
+        
+
+        <footer>
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Tue Sep 20 2016 20:47:51 GMT+0800 (CST)
+        </footer>
+    </div>
+</div>
+<script>prettyPrint();</script>
+<script src="scripts/jaguar.js"></script>
+</body>
+</html>
