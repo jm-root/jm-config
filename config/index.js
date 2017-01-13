@@ -30,9 +30,8 @@ var env = process.env.NODE_ENV||'development';
 config = config[env]||config['development'];
 config.env = env;
 
-{
-    var env = process.env;
-    config.mq = env.mq || config.mq;
-}
+['port', 'prefix', 'mq'].forEach(function(key) {
+    process.env[key] && (config[key]=process.env[key]);
+});
 
 module.exports = config;
