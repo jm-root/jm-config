@@ -6,15 +6,18 @@ if ((typeof exports !== 'undefined' && typeof module !== 'undefined')) {
 
 (function () {
     var sdk = jm.sdk;
+    var storage = sdk.storage;
     var ms = jm.ms;
 
+    var modelName = 'config';
+    if(sdk[modelName]) return;
     sdk.on('init', function (opts) {
-        var model = 'config';
-        opts[model] = opts[model] || {};
-        opts[model].uri = opts[model].uri || opts.uri;
-        opts[model].timeout = opts[model].timeout || opts.timeout;
-        sdk[model].init(opts[model]);
+        opts[modelName] = opts[modelName] || {};
+        opts[modelName].uri = opts[modelName].uri || opts.uri;
+        opts[modelName].timeout = opts[modelName].timeout || opts.timeout;
+        sdk[modelName].init(opts[modelName]);
     });
+    var cb_default = function(err, doc) {};
 
     /**
      * config对象
@@ -30,13 +33,31 @@ if ((typeof exports !== 'undefined' && typeof module !== 'undefined')) {
             var self = this;
             opts = opts || {};
             var uri = opts.uri;
-            var prefix = opts.prefix || '/config';
+            var prefix = opts.prefix || '/' + modelName;
             this.uri = uri + prefix;
+            var app = ms();
+            self.client = app;
+            app.use(function(opts, cb, next){
+                opts.data || (opts.data={});
+                if(!opts.data.token){
+                    var token = storage.getItem('token') || null;
+                    if(token) opts.data.token = token;
+                }
+                next();
+            });
             ms.client({
                 uri: this.uri,
                 timeout: opts.timeout || 0
             }, function(err, doc){
-                self.client = doc;
+                if(!err && doc) {
+                    app.use(doc);
+                    doc.on('open', function(){
+                        sdk.emit('open', modelName);
+                    });
+                    doc.on('close', function(){
+                        sdk.emit('close', modelName);
+                    });
+                }
             });
             jm.enableEvent(this);
         },
