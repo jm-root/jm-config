@@ -14,7 +14,7 @@ var config = {
     production: {
         port: 20000,
         prefix: '/config',
-        mq: 'redis://redis:6379',
+        mq: 'redis://redis.db',
         ms: [
             {
                 type: 'ws'

@@ -50,11 +50,13 @@ if ((typeof exports !== 'undefined' && typeof module !== 'undefined')) {
                 timeout: opts.timeout || 0
             }, function(err, doc){
                 if(!err && doc) {
-                    app.use(doc);
+                    app.use({fn: doc});
                     doc.on('open', function(){
+                        app.emit('open');
                         sdk.emit('open', modelName);
                     });
                     doc.on('close', function(){
+                        app.emit('close');
                         sdk.emit('close', modelName);
                     });
                 }
