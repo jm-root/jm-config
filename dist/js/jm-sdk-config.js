@@ -31,6 +31,7 @@ if ((typeof exports !== 'undefined' && typeof module !== 'undefined')) {
     sdk.config = {
         init: function (opts) {
             var self = this;
+            jm.enableEvent(this);
             opts = opts || {};
             var uri = opts.uri;
             var prefix = opts.prefix || '/' + modelName;
@@ -52,16 +53,15 @@ if ((typeof exports !== 'undefined' && typeof module !== 'undefined')) {
                 if(!err && doc) {
                     app.use(doc);
                     doc.on('open', function(){
-                        app.emit('open');
+                        self.emit('open');
                         sdk.emit('open', modelName);
                     });
                     doc.on('close', function(){
-                        app.emit('close');
+                        self.emit('close');
                         sdk.emit('close', modelName);
                     });
                 }
             });
-            jm.enableEvent(this);
         },
 
         _getlisturi: function(opts){

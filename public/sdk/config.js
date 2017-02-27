@@ -8,7 +8,7 @@ var logger = sdk.logger;
 var utils = sdk.utils;
 var config = sdk.config;
 
-config.client.on('open', function(){
+config.on('open', function(){
     (function(){
 
         var configs = {
