@@ -50,7 +50,7 @@ if ((typeof exports !== 'undefined' && typeof module !== 'undefined')) {
                 timeout: opts.timeout || 0
             }, function(err, doc){
                 if(!err && doc) {
-                    app.use({fn: doc});
+                    app.use(doc);
                     doc.on('open', function(){
                         app.emit('open');
                         sdk.emit('open', modelName);
