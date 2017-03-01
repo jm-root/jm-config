@@ -1,6 +1,0 @@
-jm-config:
- build: . 
- ports:
-  - "20000:20000"
- external_links:
-  - redis
