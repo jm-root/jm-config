@@ -1,6 +1,6 @@
 {
   "name": "jm-config",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "a config lib using jm-mq",
   "main": "./lib/index",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/jm-root/jm-config",
   "dependencies": {
-    "jm-ms": "*",
+    "jm-server": "*",
     "jm-mq": "*"
   },
   "devDependencies": {
