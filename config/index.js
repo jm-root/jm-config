@@ -1,37 +1,25 @@
 var config = {
     development: {
         port: 20000,
-        prefix: '/config',
-        ms: [
-            {
-                type: 'ws'
-            },
-            {
-                type: 'http'
+        modules: {
+            config: {
+                module: process.cwd() + '/lib'
             }
-        ]
+        }
     },
     production: {
         port: 20000,
-        prefix: '/config',
         mq: 'redis://redis.db',
-        ms: [
-            {
-                type: 'ws'
-            },
-            {
-                type: 'http'
+        modules: {
+            config: {
+                module: process.cwd() + '/lib'
             }
-        ]
+        }
     }
 };
 
 var env = process.env.NODE_ENV||'development';
 config = config[env]||config['development'];
 config.env = env;
-
-['port', 'prefix', 'mq'].forEach(function(key) {
-    process.env[key] && (config[key]=process.env[key]);
-});
 
 module.exports = config;
