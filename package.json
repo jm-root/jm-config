@@ -1,11 +1,11 @@
 {
   "name": "jm-config",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "a config lib using jm-mq",
   "main": "./lib/index",
   "scripts": {
-    "start": "node app",
-    "cluster": "node cluster",
+    "start": "jm-server",
+    "cluster": "jm-server --cluster",
     "test": "node test"
   },
   "repository": {
