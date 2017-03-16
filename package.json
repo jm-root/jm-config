@@ -1,6 +1,6 @@
 {
   "name": "jm-config",
-  "version": "0.0.25",
+  "version": "1.0.0",
   "description": "a config lib using jm-mq",
   "main": "./lib/index",
   "scripts": {

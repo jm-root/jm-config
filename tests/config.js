@@ -6,7 +6,7 @@ if (typeof module !== 'undefined' && module.exports) {
 var sdk = jm.sdk;
 var logger = sdk.logger;
 var utils = sdk.utils;
-var config = require('../lib')().config;
+var config = require('../lib')();
 
 (function(){
 
