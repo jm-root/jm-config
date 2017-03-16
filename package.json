@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/jm-root/jm-config",
   "dependencies": {
-    "jm-server": "*",
+    "jm-server": "~0.1.0",
     "jm-mq": "*"
   },
   "devDependencies": {
