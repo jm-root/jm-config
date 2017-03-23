@@ -225,9 +225,9 @@ if ((typeof exports !== 'undefined' && typeof module !== 'undefined')) {
                 };
             opts = opts || {};
             var url = this._getlisturi(opts);
-            if(opts.all) url += '?all=1';
             this.client.get({
-                uri: url
+                uri: url,
+                data:opts
             }, cb);
         },
 
