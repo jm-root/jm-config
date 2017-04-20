@@ -1,6 +1,6 @@
 {
   "name": "jm-config",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "a config lib using jm-mq",
   "main": "./lib/index",
   "scripts": {
@@ -27,7 +27,7 @@
     "jm-config-mq": "^0.0.3",
     "jm-core": "~0.0.7",
     "jm-mq": "~0.2.1",
-    "jm-server": "~0.1.5"
+    "jm-server": "~0.1.6"
   },
   "devDependencies": {
     "jm-sdk-core": "*",
