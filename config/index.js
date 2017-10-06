@@ -1,4 +1,4 @@
-require('log4js').configure(require('./log4js'))
+require('log4js').configure(require('path').join(__dirname, 'log4js.json'))
 var config = {
   development: {
     port: 20000,
@@ -12,7 +12,7 @@ var config = {
     }
   },
   production: {
-    port: 20000,
+    port: 80,
     mq: 'redis://redis.db',
     modules: {
       config: {

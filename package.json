@@ -24,12 +24,11 @@
   },
   "homepage": "https://github.com/jm-root/jm-config",
   "dependencies": {
-    "jm-config-mq": "^0.0.3",
     "jm-config-mqtt": "^0.0.1",
+    "jm-config-mq": "^0.0.3",
     "jm-core": "~0.0.7",
     "jm-mq": "~0.2.1",
-    "jm-server": "~0.1.6",
-    "log4js": "^2.3.4"
+    "jm-server": "~0.1.6"
   },
   "devDependencies": {
     "jm-sdk-core": "*",
