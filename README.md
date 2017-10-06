@@ -20,7 +20,10 @@ npm start
 
 mq_public 请参考 [jm-config-mq] (https://github.com/jm-root/jm-config-mq)
 
+mqtt MQTT 服务器Uri
+
 mq Redis 服务器Uri
 
-disableMQ 是否禁止 jm-config-mq 插件, 默认不禁止, 支持配置变化时消息通知
+disableMQTT 是否禁止 jm-config-mqtt 插件, 默认不禁止, 支持配置变化时消息通知
 
+disableMQ 是否禁止 jm-config-mq 插件, 默认不禁止, 支持配置变化时消息通知

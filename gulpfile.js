@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var gulp = require('gulp'),
   gutil = require('gulp-util'),
@@ -8,32 +8,31 @@ var gulp = require('gulp'),
   concat = require('gulp-concat'),
   rename = require('gulp-rename'),
   uglify = require('gulp-uglify'),
-  version = 'v' + require('./package.json').version;
+  version = 'v' + require('./package.json').version
 
 gulp.task('clean', function () {
   return gulp.src(['dist/*'])
-    .pipe(clean({force: true}));
-});
+    .pipe(clean({force: true}))
+})
 
 gulp.task('jshint', function () {
   return gulp.src([
-      'sdk/lib/**/*.js'
+    'sdk/lib/**/*.js'
   ])
     .pipe(jshint())
-    .pipe(jshint.reporter());
-});
+    .pipe(jshint.reporter())
+})
 
 gulp.task('js', function () {
   return gulp.src([
-      'sdk/**/*.js',
-      '!sdk/index.js'
+    'sdk/**/*.js',
+    '!sdk/index.js'
   ])
-      .pipe(concat('dist/js/jm-sdk-config.js'))
-.pipe(gulp.dest(''))
+    .pipe(concat('dist/js/jm-sdk-config.js'))
+    .pipe(gulp.dest(''))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
-    .pipe(gulp.dest(''));
-});
+    .pipe(gulp.dest(''))
+})
 
-gulp.task('default', gulpSequence('clean', 'jshint', ['js']));
-
+gulp.task('default', gulpSequence('clean', 'jshint', ['js']))
