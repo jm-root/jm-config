@@ -7,8 +7,7 @@ var config = {
       config: {
         module: process.cwd() + '/lib'
       },
-      'jm-config-mqtt': {},
-      'jm-config-mq': {}
+      // 'jm-config-mq': {}
     }
   },
   production: {
@@ -18,7 +17,6 @@ var config = {
       config: {
         module: process.cwd() + '/lib'
       },
-      'jm-config-mqtt': {},
       'jm-config-mq': {}
     }
   }
