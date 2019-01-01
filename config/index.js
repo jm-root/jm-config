@@ -7,7 +7,6 @@ var config = {
       config: {
         module: process.cwd() + '/lib'
       },
-      // 'jm-config-mq': {}
     }
   },
   production: {
@@ -16,8 +15,7 @@ var config = {
     modules: {
       config: {
         module: process.cwd() + '/lib'
-      },
-      'jm-config-mq': {}
+      }
     }
   }
 }
@@ -25,8 +23,5 @@ var config = {
 var env = process.env.NODE_ENV || 'development'
 config = config[env] || config['development']
 config.env = env
-
-if (process.env['disableMQTT']) delete config.modules['jm-config-mqtt']
-if (process.env['disableMQ']) delete config.modules['jm-config-mq']
 
 module.exports = config
