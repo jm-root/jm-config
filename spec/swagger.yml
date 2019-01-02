@@ -1,0 +1,161 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/jm-root/jm-sso/1.0.0
+info:
+  version: "2.0.0"
+  title: jm-config-api
+  description: 基于jm-server的配置服务API
+paths:
+  /config/:root:
+    get:
+      description: 列出所有配置项的键值对
+      responses:
+        '200':
+          description: 列出所有配置项的键值对
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listConfig'
+    post:
+      description: 设置多个配置信息
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: object
+                  description: 配置值
+                  example:
+                    {
+                      "KFC": 110,
+                      "Google": "USA"
+                    }
+                expire:
+                  type: number
+                  description: 过期时间, 单位秒, 0表示永不过期
+                  default: 0
+                json:
+                  type: boolean
+                  description: value是否为json字符串
+                  default: false
+                  example: true
+      responses:
+        '200':
+          description: 设置多个配置信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result'
+    delete:
+      description: 删除根配置, 所有根下面的配置信息都被删除
+      responses:
+        '200':
+          description: 删除根配置
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result'
+
+  /config/:root?all=:
+    get:
+      description: 列出所有配置项
+      required: true
+      parameters:
+        - name: all
+          description: 获得所有配置项的key
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 列出所有配置项
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listConfigAll'
+  /config/:root/:key:
+    get:
+      description: 获取配置信息
+      responses:
+        '200':
+          description: 获取配置信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getConfig'
+    post:
+      description: 设置配置信息
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: object
+                  description: 配置值
+                expire:
+                  type: number
+                  description: 过期时间, 单位秒, 0表示永不过期
+                  default: 0
+                json:
+                  type: boolean
+                  description: value是否为json字符串
+                  default: false
+      responses:
+        '200':
+          description: 获取配置信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result'
+    delete:
+        description: 删除配置信息
+        responses:
+          '200':
+            description: 删除配置信息
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/result'
+
+components:
+  schemas:
+    listConfig:
+      type: object
+      description: 列出所有配置项键值对
+      example:
+        {
+          "KFC": 123,
+          "Apple": "California"
+        }
+    listConfigAll:
+      type: object
+      description: 列出所有配置项
+      properties:
+        rows:
+          type: array
+          description: 列出所有配置项的key
+          example:
+            [
+              "KFC",
+              "Apple"
+            ]
+    getConfig:
+      type: object
+      description: 获取配置信息
+      properties:
+        ret:
+          type: object
+          example: 123
+    result:
+      type: object
+      description: 设置配置信息
+      properties:
+        ret:
+          type: boolean
+          example: true
