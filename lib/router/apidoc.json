@@ -1,8 +1,0 @@
-{
-  "name": "jm-config",
-  "version": "2.0.0",
-  "description": "apiDoc for jm-config",
-  "title": "apiDoc",
-  "url" : "http://localhost:20000/config",
-  "sampleUrl" : "http://localhost:20000/config"
-}
