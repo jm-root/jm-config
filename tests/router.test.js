@@ -8,11 +8,11 @@ beforeAll(() => {
 
 describe('service config.js', () => {
   var params = {
-    root: "test:abc",
+    root: 'test:abc',
     value: {
       KFC: 110,
       Google: {
-        from: "USA"
+        from: 'USA'
       }
     },
     expire: 0,
@@ -20,8 +20,8 @@ describe('service config.js', () => {
   }
 
   var paramOne = {
-    root: "test:abc",
-    key: "xyz",
+    root: 'test:abc',
+    key: 'xyz',
     value: {
       high: 123
     },
@@ -84,11 +84,11 @@ describe('service config.js', () => {
   })
 
   test('delConfig with param all', async () => {
-    let doc = await router.delete(`/${paramOne.root}/${paramOne.key}`, { all: 1})
+    let doc = await router.delete(`/${paramOne.root}/${paramOne.key}`, { all: 1 })
     expect(typeof doc.ret).toBe('boolean')
   })
 
-  test('delRoot', async ()=> {
+  test('delRoot', async () => {
     let doc = await router.delete(`/${paramOne.root}`)
     if (!doc.err) {
       expect(typeof doc.ret).toBe('boolean')
